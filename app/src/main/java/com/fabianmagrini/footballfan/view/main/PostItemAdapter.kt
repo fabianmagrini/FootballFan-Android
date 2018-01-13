@@ -9,12 +9,14 @@ import com.fabianmagrini.footballfan.view.common.ItemAdapter
 import com.fabianmagrini.footballfan.view.common.bindView
 
 class PostItemAdapter(
-        val post: Post
+        val post: Post,
+        val clicked: (Post) -> Unit
 ) : ItemAdapter<PostItemAdapter.ViewHolder>(R.layout.item_post) {
 
     override fun onCreateViewHolder(itemView: View) = ViewHolder(itemView)
 
     override fun ViewHolder.onBindViewHolder() {
+        itemView.setOnClickListener { clicked(post) }
         titleView.text = post.title
         subTitleView.text = "${post.age} (${post.feed})"
     }

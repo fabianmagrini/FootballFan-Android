@@ -1,8 +1,11 @@
 package com.fabianmagrini.footballfan.view.main
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Window
+import android.widget.Toast;
 import com.fabianmagrini.footballfan.R
 import com.fabianmagrini.footballfan.data.FootballFanRepository
 import com.fabianmagrini.footballfan.model.Post
@@ -28,12 +31,25 @@ class MainActivity : BaseActivityWithPresenter(), MainView {
     }
 
     override fun show(items: List<Post>) {
-        val categoryItemAdapters = items.map(::PostItemAdapter)
+        val categoryItemAdapters = items.map(this::createCategoryItemAdapter)
         recyclerView.adapter = MainListAdapter(categoryItemAdapters)
     }
 
     override fun showError(error: Throwable) {
         toast("Error: ${error.message}")
         error.printStackTrace()
+    }
+
+    private fun createCategoryItemAdapter(post: Post)
+            = PostItemAdapter(post, { showPostDetail(post) })
+
+    private fun showPostDetail(post: Post) {
+        Toast.makeText(this, post.link, Toast.LENGTH_SHORT).show();
+
+
+        val intent = Intent(Intent.ACTION_VIEW,
+                Uri.parse(post.link))
+        startActivity(intent)
+
     }
 }
